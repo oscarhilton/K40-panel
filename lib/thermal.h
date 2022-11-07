@@ -11,10 +11,13 @@ void thermalSetup()
   Serial.println("✓ Temperature setup completed.");
 }
 
+float getCurrentTemperature() {
+  sensors.requestTemperatures();
+  return sensors.getTempCByIndex(0);
+}
+
 boolean isTheTempCorrect()
 {
-  sensors.requestTemperatures();
-  float currentTemp = sensors.getTempCByIndex(0);
-  Serial.println(currentTemp);
-  return !(currentTemp >= MAX_WATER_TEMP || currentTemp <= MIN_WATER_TEMP);
+  float currentTemp = getCurrentTemperature();
+  return !(currentTemp >= MAX_WATER_TEMP) && !(currentTemp <= MIN_WATER_TEMP);
 }

@@ -8,13 +8,22 @@ void rotarySetup()
 {
   pinMode(ROTARY_PIN_A, INPUT);
   pinMode(ROTARY_PIN_B, INPUT);
+  pinMode(ROTARY_SWITCH, INPUT);
   // Reads the initial state of the ROTARY_PIN_A
   aLastState = digitalRead(ROTARY_PIN_A);
 }
 
-int rotaryLoop()
+void rotaryLoop()
 {
+  // Serial.println("Switch State:");
+  // Serial.println(digitalRead(ROTARY_SWITCH));
   aState = digitalRead(ROTARY_PIN_A); // Reads the "current" state of the ROTARY_PIN_A
+
+  if (!digitalRead(ROTARY_SWITCH))
+  {
+    Serial.println("BUTTON PUSH!");
+  }
+
   // If the previous and the current state of the ROTARY_PIN_A are different, that means a Pulse has occured
   if (aState != aLastState)
   {
@@ -28,8 +37,8 @@ int rotaryLoop()
       rotaryCounter--;
     }
     Serial.print("Position: ");
-    Serial.println(rotaryCounter);
+    Serial.print(rotaryCounter);
+    Serial.println(rotaryCounter % 5);
   }
   aLastState = aState; // Updates the previous state of the ROTARY_PIN_A with the current state
-  return rotaryCounter;
 }

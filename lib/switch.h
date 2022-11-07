@@ -8,5 +8,5 @@ void switchSetup()
 
 boolean isSwitchOn()
 {
-  return digitalRead(LASER_SWITCH) == LOW; // button is on/off switch
+  return digitalRead(LASER_SWITCH) == HIGH; // button is on/off switch
 }

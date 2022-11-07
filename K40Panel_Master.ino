@@ -6,17 +6,26 @@
 #include "lib/power.h"
 #include "lib/water.h"
 #include "lib/switch.h"
+#include "lib/rotary.h"
 
 boolean laserIsSafe = false;
 
 void setup() {
   Serial.begin(SERIAL_RATE);
   Serial.println("STARTING");
+
+  // Ready
+  pinMode(READY_PIN, OUTPUT);
+  pinMode(ALARM_LID, OUTPUT);
+  pinMode(ALARM_TEMP, OUTPUT);
+  pinMode(ALARM_WATER, OUTPUT);
+
   lidSetup();
   switchSetup();
   thermalSetup();
   LCDSetup();
   waterSetup();
+  rotarySetup();
 }
 
 boolean checkIfPassAllSafetyChecks() {
@@ -24,19 +33,20 @@ boolean checkIfPassAllSafetyChecks() {
 }
 
 void displaySafetyIcons() {
-  if (!isSwitchOn())
-    printToLCD("X Switch is turned off.");
-  if (!isLidSafe())
-    printToLCD("X Lid is open!");
-  if (!isTheTempCorrect())
-    printToLCD("X Check temperature.");
-  if (!isPowerSafe())
-    printToLCD("X Power dangerous to laser.");
-  if (!isWaterFlowing())
-    printToLCD("X Check water pump is working.");
+  digitalWrite(ALARM_LID, !isLidSafe());
+  digitalWrite(ALARM_TEMP, !isTheTempCorrect());
+  digitalWrite(ALARM_POWER, !isPowerSafe());
+  digitalWrite(ALARM_WATER, !isWaterFlowing());
+  digitalWrite(READY_PIN, checkIfPassAllSafetyChecks());
 }
 
 void loop() {
-    printToLCD("Good to go!");
+    // printToLCD("Good to go!");
     displaySafetyIcons();
+    rotaryLoop();
+    lookForI2CDevices();
+    // digitalWrite(READY_PIN, HIGH);
+    // delay(100);
+    // digitalWrite(READY_PIN, LOW);
+    // delay(100);
 }

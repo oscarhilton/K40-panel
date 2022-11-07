@@ -15,7 +15,7 @@ void LCDSetup()
 
 void printToLCD(String text)
 {
-  Serial.println(text);
+  // Serial.println(text);
 }
 
 void lookForI2CDevices()

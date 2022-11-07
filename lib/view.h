@@ -1,13 +1,14 @@
-#include "rotary.h"
 // pages
 #define HOME 1
 
-void handleCurrentView() {
-  int currentPage = rotaryLoop();
+void displayView() {
+  Serial.print("Home");
+}
 
+void handleCurrentView(int currentPage) {
   switch(currentPage) {
     case HOME:
-      Serial.print("Home");
+      displayView();
       break;
     default:
       return;
