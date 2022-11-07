@@ -8,8 +8,6 @@
 #include "lib/switch.h"
 #include "lib/rotary.h"
 
-boolean laserIsSafe = false;
-
 void setup() {
   Serial.begin(SERIAL_RATE);
   Serial.println("STARTING");
@@ -19,6 +17,7 @@ void setup() {
   pinMode(ALARM_LID, OUTPUT);
   pinMode(ALARM_TEMP, OUTPUT);
   pinMode(ALARM_WATER, OUTPUT);
+  pinMode(POWER_LEVEL, INPUT);
 
   lidSetup();
   switchSetup();
@@ -41,12 +40,9 @@ void displaySafetyIcons() {
 }
 
 void loop() {
-    // printToLCD("Good to go!");
-    displaySafetyIcons();
-    rotaryLoop();
-    lookForI2CDevices();
-    // digitalWrite(READY_PIN, HIGH);
-    // delay(100);
-    // digitalWrite(READY_PIN, LOW);
-    // delay(100);
+  printToLCD(String(getCurrentTemperature()) + 'C');
+  displaySafetyIcons();
+  digitalWrite(LASER_ACTIVE, checkIfPassAllSafetyChecks());
+  Serial.println(getPercentage());
+  Serial.println(isPowerSafe());
 }
